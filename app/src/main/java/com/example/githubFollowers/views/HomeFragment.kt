@@ -51,7 +51,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             if (code >= 400) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Something Went wrong")
-                    .setMessage("this username doesnot exist!")
+                    .setMessage("this username does not exist!")
                     .setPositiveButton("Ok") { dialog, _ ->
                        dialog.dismiss()
                     }

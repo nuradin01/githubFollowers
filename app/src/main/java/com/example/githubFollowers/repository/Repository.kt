@@ -49,7 +49,7 @@ class Repository @Inject constructor(private val networkQueue: NetworkQueue,
     suspend fun performNetworkRequest(userName:String) = withContext(Dispatchers.IO){
         val request = StringRequest(
             Request.Method.GET,
-            "https://api.github.com/users/$userName/following",
+            "https://api.github.com/users/$userName/followers",
             { response ->
                 try {
                     //Get data as Json Object
