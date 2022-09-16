@@ -14,6 +14,7 @@ import com.example.githubFollowers.databinding.FragmentFollowersBinding
 import com.example.githubFollowers.databinding.FragmentHomeBinding
 import com.example.githubFollowers.databinding.FragmentProfileBinding
 import com.example.githubFollowers.viewmodels.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -73,6 +74,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                             mainViewModel.insertData(user)
                         }
                         changeMenuItemColor(menuItem, R.color.yellow)
+                        Snackbar
+                            .make(
+                                binding!!.ivAvatar, "You have successfully " +
+                                        "added this user to your favorites", Snackbar.LENGTH_SHORT
+                            )
+                            .show()
                         true
                     }
                     else -> false
