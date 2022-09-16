@@ -11,6 +11,7 @@ import timber.log.Timber
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
+import org.json.JSONObject
 import javax.inject.Inject
 
 class Repository @Inject constructor(private val networkQueue: NetworkQueue,
@@ -21,8 +22,9 @@ class Repository @Inject constructor(private val networkQueue: NetworkQueue,
     //Stream live data as Flow
     val allData : Flow<List<UserData>> = dao.getOrderedNetworkDataFlow()
 
-    //To store webData received from the network
+
     val webData = MutableLiveData<List<UserData>>()
+    val userData = MutableLiveData<UserData>()
     //To store error code received from the network
     val errorCode = MutableLiveData<Int>()
 
@@ -67,6 +69,45 @@ class Repository @Inject constructor(private val networkQueue: NetworkQueue,
 
                     }
                     webData.postValue(tempList)
+
+                } catch (e: Exception) {
+                    Timber.d("Error in response:%s",e.toString())
+                }
+            },
+            { error ->
+                errorCode.postValue(error.networkResponse?.statusCode)
+                Timber.d("Fail to get response: ${error.networkResponse?.statusCode}")
+            })
+        networkQueue.addToRequestQueue(request)
+    }
+
+    suspend fun getUser(userName:String) = withContext(Dispatchers.IO){
+        val request = StringRequest(
+            Request.Method.GET,
+            "https://api.github.com/users/$userName",
+            { response ->
+                try {
+                    //Get data as Json Object
+                    val jsonData =JSONObject(response.toString())
+//                    Timber.d("Data is :%s",jsonData)
+
+
+                    val tempUser = UserData(
+                        id = jsonData.getInt("id"),
+                        login = jsonData.getString("login"),
+                        avatar_url = jsonData.getString("avatar_url"),
+                        public_gists = jsonData.getInt("public_gists"),
+                        public_repos = jsonData.getInt("public_repos"),
+                        following = jsonData.getInt("following"),
+                        followers = jsonData.getInt("followers"),
+                        created_at = jsonData.getString("created_at"),
+                        bio = jsonData.getString("bio"),
+                        location = jsonData.getString("location"),
+                        name = jsonData.getString("name")
+                    )
+                    Timber.d("userInfo $tempUser")
+                    userData.postValue(tempUser)
+
 
                 } catch (e: Exception) {
                     Timber.d("Error in response:%s",e.toString())

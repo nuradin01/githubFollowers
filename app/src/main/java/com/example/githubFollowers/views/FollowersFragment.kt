@@ -55,7 +55,7 @@ class FollowersFragment : Fragment(R.layout.fragment_followers) {
         mainViewModel.webData.observe(viewLifecycleOwner){
             binding?.rvUsers?.apply {
                 layoutManager = GridLayoutManager(requireContext(), 3)
-                val recycleAdapter = UserAdapter()
+                val recycleAdapter = UserAdapter(mainViewModel)
                 adapter = recycleAdapter
                 recycleAdapter.submitList(it)
             }

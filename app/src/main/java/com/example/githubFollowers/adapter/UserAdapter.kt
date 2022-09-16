@@ -5,24 +5,36 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.githubFollowers.R
 import com.example.githubFollowers.models.UserData
+import com.example.githubFollowers.viewmodels.MainViewModel
+import com.example.githubFollowers.views.ProfileFragment
 import dagger.hilt.android.scopes.FragmentScoped
 
+
 @FragmentScoped
-class UserAdapter: ListAdapter<UserData, UserAdapter.ViewHolder>(NetworkDataCallBack()) {
+class UserAdapter(
+    private val mainViewModel: MainViewModel
+): ListAdapter<UserData, UserAdapter.ViewHolder>(NetworkDataCallBack()) {
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view){
         private val avatar: ImageView = view.findViewById(R.id.ivAvatar)
         private val username: TextView = view.findViewById(R.id.tvUsername)
-
         fun bind(avatarData: String?,usernameData: String?){
-            avatar.load(avatarData)
+            avatar.load(avatarData){
+                crossfade(600)
+                error(R.drawable.ic_person)
+            }
             username.text = usernameData
+
         }
 
         companion object {
@@ -41,6 +53,16 @@ class UserAdapter: ListAdapter<UserData, UserAdapter.ViewHolder>(NetworkDataCall
 
     override fun onBindViewHolder(holder:ViewHolder, position: Int) {
         holder.bind(getItem(position).avatar_url,getItem(position).login)
+        holder.itemView.findViewById<ConstraintLayout>(R.id.clUser).setOnClickListener {
+            mainViewModel.getUser(getItem(position).login)
+            val profileFragment = ProfileFragment()
+             (it.context as AppCompatActivity).supportFragmentManager
+                .beginTransaction().
+                replace(R.id.flayout,profileFragment).addToBackStack(null)
+                .commit()
+        }
+
+
     }
 }
 

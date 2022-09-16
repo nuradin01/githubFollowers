@@ -19,6 +19,7 @@ class MainViewModel@Inject constructor(private val repository: Repository):ViewM
 
     //Get data from web as live data and expose to view for observing
     val webData: LiveData<List<UserData>> = repository.webData
+    val userData: LiveData<UserData> = repository.userData
     val errorCode: LiveData<Int> = repository.errorCode
 
     /**
@@ -27,6 +28,11 @@ class MainViewModel@Inject constructor(private val repository: Repository):ViewM
     fun performNetworkRequest(userName: String) = viewModelScope.launch{
         repository.performNetworkRequest(userName)
     }
+//
+    fun getUser(userName: String) = viewModelScope.launch{
+        repository.getUser(userName)
+    }
+
 
     /**
      * Insert data into room DB

@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
 data class UserData(
     @PrimaryKey(autoGenerate = false)
     var id: Int = 0,
-    val name:String ="No name",
+    val name:String ="",
     val login:String,
     val avatar_url:String?,
     val public_repos:Int=0,
