@@ -12,13 +12,13 @@ interface UserDao {
 
     //REPLACE will replace the old data if it has the same key
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(data:UserData)
+    fun insert(data: UserData)
 
     // A FlowData stream from the DB to handle live continuous data
-    @Query("SELECT * FROM sample_table ORDER BY id ASC")
+    @Query("SELECT * FROM user_table ORDER BY id ASC")
     fun getOrderedNetworkDataFlow(): Flow<List<UserData>>
 
     //Delete data from table
-    @Query("DELETE FROM sample_table")
+    @Query("DELETE FROM user_table")
     fun clearAll()
 }

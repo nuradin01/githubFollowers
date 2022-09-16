@@ -14,31 +14,33 @@ import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
 
-class Repository @Inject constructor(private val networkQueue: NetworkQueue,
-                                     private val dao: UserDao) {
+class Repository @Inject constructor(
+    private val networkQueue: NetworkQueue,
+    private val dao: UserDao
+) {
 
 
+    //Stream live data as Flow from database
+    val readUsers: Flow<List<UserData>> = dao.getOrderedNetworkDataFlow()
 
-    //Stream live data as Flow
-    val allData : Flow<List<UserData>> = dao.getOrderedNetworkDataFlow()
 
-
-    val webData = MutableLiveData<List<UserData>>()
+    val followersData = MutableLiveData<List<UserData>>()
     val userData = MutableLiveData<UserData>()
+
     //To store error code received from the network
     val errorCode = MutableLiveData<Int>()
 
     /**
      * This function insert network data to DB
      */
-    fun insertData(data:UserData){
+    fun insertData(data: UserData) {
         dao.insert(data)
     }
 
     /**
      * This function deletes data from table
      */
-    fun clearAll(){
+    fun clearAll() {
         dao.clearAll()
     }
 
@@ -48,30 +50,31 @@ class Repository @Inject constructor(private val networkQueue: NetworkQueue,
      * Using a coroutine to fetch network data through the IO Thread
      * Get data as Json Object and post to live data
      */
-    suspend fun performNetworkRequest(userName:String) = withContext(Dispatchers.IO){
+    suspend fun getFollowers(userName: String) = withContext(Dispatchers.IO) {
         val request = StringRequest(
             Request.Method.GET,
             "https://api.github.com/users/$userName/followers",
             { response ->
                 try {
                     //Get data as Json Object
-                    val jsonData =JSONArray(response.toString())
-                    Timber.d("Data is :%s",jsonData)
+                    val jsonData = JSONArray(response.toString())
 
                     val tempList = mutableListOf<UserData>()
-                    for(each in 0 until jsonData.length()){
+                    for (each in 0 until jsonData.length()) {
                         val filterData = jsonData.getJSONObject(each)
-                        tempList.add(UserData(
-                            id = filterData.getInt("id"),
-                            login = filterData.getString("login"),
-                            avatar_url = filterData.getString("avatar_url")
-                        ))
+                        tempList.add(
+                            UserData(
+                                id = filterData.getInt("id"),
+                                login = filterData.getString("login"),
+                                avatar_url = filterData.getString("avatar_url")
+                            )
+                        )
 
                     }
-                    webData.postValue(tempList)
+                    followersData.postValue(tempList)
 
                 } catch (e: Exception) {
-                    Timber.d("Error in response:%s",e.toString())
+                    Timber.d("Error in response:%s", e.toString())
                 }
             },
             { error ->
@@ -81,15 +84,14 @@ class Repository @Inject constructor(private val networkQueue: NetworkQueue,
         networkQueue.addToRequestQueue(request)
     }
 
-    suspend fun getUser(userName:String) = withContext(Dispatchers.IO){
+    suspend fun getUser(userName: String) = withContext(Dispatchers.IO) {
         val request = StringRequest(
             Request.Method.GET,
             "https://api.github.com/users/$userName",
             { response ->
                 try {
                     //Get data as Json Object
-                    val jsonData =JSONObject(response.toString())
-//                    Timber.d("Data is :%s",jsonData)
+                    val jsonData = JSONObject(response.toString())
 
 
                     val tempUser = UserData(
@@ -105,12 +107,11 @@ class Repository @Inject constructor(private val networkQueue: NetworkQueue,
                         location = jsonData.getString("location"),
                         name = jsonData.getString("name")
                     )
-                    Timber.d("userInfo $tempUser")
                     userData.postValue(tempUser)
 
 
                 } catch (e: Exception) {
-                    Timber.d("Error in response:%s",e.toString())
+                    Timber.d("Error in response:%s", e.toString())
                 }
             },
             { error ->

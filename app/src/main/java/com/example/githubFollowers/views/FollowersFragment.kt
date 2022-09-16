@@ -33,15 +33,15 @@ class FollowersFragment : Fragment(R.layout.fragment_followers) {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentFollowersBinding.inflate(inflater,container,false)
+        binding = FragmentFollowersBinding.inflate(inflater, container, false)
 
-        mainViewModel.webData.observe(viewLifecycleOwner) { followers->
-            if (followers.isEmpty()){
+        mainViewModel.followersData.observe(viewLifecycleOwner) { followers ->
+            if (followers.isEmpty()) {
                 binding!!.tvError.visibility = View.VISIBLE
-                binding!!.tvError.text= "This user doesn't have any followers"
+                binding!!.tvError.text = "This user doesn't have any followers"
                 binding!!.ivError.visibility = View.VISIBLE
                 binding!!.rvUsers.visibility = View.GONE
-            } else if (!followers.isNullOrEmpty()){
+            } else if (!followers.isNullOrEmpty()) {
                 binding!!.tvError.visibility = View.GONE
                 binding!!.ivError.visibility = View.GONE
                 displayData()
@@ -51,8 +51,9 @@ class FollowersFragment : Fragment(R.layout.fragment_followers) {
 
         return binding!!.root
     }
-    private fun displayData(){
-        mainViewModel.webData.observe(viewLifecycleOwner){
+
+    private fun displayData() {
+        mainViewModel.followersData.observe(viewLifecycleOwner) {
             binding?.rvUsers?.apply {
                 layoutManager = GridLayoutManager(requireContext(), 3)
                 val recycleAdapter = UserAdapter(mainViewModel)

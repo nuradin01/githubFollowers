@@ -2,10 +2,12 @@ package com.example.githubFollowers
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 
 import com.example.githubFollowers.databinding.ActivityMainBinding
 import com.example.githubFollowers.viewmodels.MainViewModel
+import com.example.githubFollowers.views.FavoriteFragment
 import com.example.githubFollowers.views.FollowersFragment
 
 import com.example.githubFollowers.views.HomeFragment
@@ -25,15 +27,36 @@ class MainActivity : AppCompatActivity() {
         val fragmentHome = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.flayout,fragmentHome).commit()
 
-        mainViewModel.webData.observe(this) { followers->
+        mainViewModel.followersData.observe(this) { followers->
             if (followers!=null){
                 val followersFragment = FollowersFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.flayout,followersFragment).addToBackStack(null).commit()
             }
 
         }
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
+            when(it.itemId) {
+                R.id.miHome ->{
+
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.flayout,fragmentHome)
+                        .commit()
+                }
+                R.id.miFavorites -> {
+                    val favoriteFragment =FavoriteFragment()
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.flayout,favoriteFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
+            }
+            true
+        }
 
     }
+
 
 
 }

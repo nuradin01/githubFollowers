@@ -24,7 +24,7 @@ object AppModule {
     ) = Room.databaseBuilder(
         app,
         Database::class.java,
-        "SampleDatabase"
+        "GithubUsersDatabase"
     ).fallbackToDestructiveMigration().build()
 
     /**

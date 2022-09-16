@@ -12,24 +12,25 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel@Inject constructor(private val repository: Repository):ViewModel() {
+class MainViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     //Get live network data records from room DB as Flow
-    val networkData: LiveData<List<UserData>> = repository.allData.asLiveData()
+    val readUsers: LiveData<List<UserData>> = repository.readUsers.asLiveData()
 
     //Get data from web as live data and expose to view for observing
-    val webData: LiveData<List<UserData>> = repository.webData
+    val followersData: LiveData<List<UserData>> = repository.followersData
     val userData: LiveData<UserData> = repository.userData
     val errorCode: LiveData<Int> = repository.errorCode
 
     /**
      * Launch network request to fetch data
      */
-    fun performNetworkRequest(userName: String) = viewModelScope.launch{
-        repository.performNetworkRequest(userName)
+    fun getFollowers(userName: String) = viewModelScope.launch {
+        repository.getFollowers(userName)
     }
-//
-    fun getUser(userName: String) = viewModelScope.launch{
+
+    //
+    fun getUser(userName: String) = viewModelScope.launch {
         repository.getUser(userName)
     }
 
@@ -37,14 +38,14 @@ class MainViewModel@Inject constructor(private val repository: Repository):ViewM
     /**
      * Insert data into room DB
      */
-    fun insertData(data:UserData) = viewModelScope.launch(Dispatchers.IO){
+    fun insertData(data: UserData) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertData(data)
     }
 
     /**
      * Delete data from room DB
      */
-    fun deleteData() = viewModelScope.launch(Dispatchers.IO){
+    fun deleteData() = viewModelScope.launch(Dispatchers.IO) {
         repository.clearAll()
     }
 }

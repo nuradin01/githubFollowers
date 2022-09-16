@@ -38,7 +38,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             if (username.isEmpty()) {
                 binding!!.userNameTextField.error = "This field can not be empty"
             } else {
-                mainViewModel.performNetworkRequest(username)
+                mainViewModel.getFollowers(username)
 
             }
 
@@ -53,7 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     .setTitle("Something Went wrong")
                     .setMessage("this username does not exist!")
                     .setPositiveButton("Ok") { dialog, _ ->
-                       dialog.dismiss()
+                        dialog.dismiss()
                     }
                     .show()
             }

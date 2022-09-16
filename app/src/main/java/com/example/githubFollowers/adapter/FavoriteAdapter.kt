@@ -17,11 +17,9 @@ import com.example.githubFollowers.viewmodels.MainViewModel
 import com.example.githubFollowers.views.ProfileFragment
 import dagger.hilt.android.scopes.FragmentScoped
 
-
 @FragmentScoped
-class UserAdapter(
-    private val mainViewModel: MainViewModel
-) : ListAdapter<UserData, UserAdapter.ViewHolder>(NetworkDataCallBack()) {
+class FavoriteAdapter() :
+    ListAdapter<UserData, FavoriteAdapter.ViewHolder>(NetworkDataCallBack2()) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val avatar: ImageView = view.findViewById(R.id.ivAvatar)
@@ -38,7 +36,7 @@ class UserAdapter(
         companion object {
             fun create(parent: ViewGroup): ViewHolder {
                 val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.user_layout, parent, false)
+                    .inflate(R.layout.user_layout_vertical, parent, false)
                 return ViewHolder(view)
             }
         }
@@ -51,19 +49,10 @@ class UserAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position).avatar_url, getItem(position).login)
-        holder.itemView.findViewById<ConstraintLayout>(R.id.clUser).setOnClickListener {
-            mainViewModel.getUser(getItem(position).login)
-            val profileFragment = ProfileFragment()
-            (it.context as AppCompatActivity).supportFragmentManager
-                .beginTransaction().replace(R.id.flayout, profileFragment).addToBackStack(null)
-                .commit()
-        }
-
-
     }
 }
 
-class NetworkDataCallBack : DiffUtil.ItemCallback<UserData>() {
+class NetworkDataCallBack2 : DiffUtil.ItemCallback<UserData>() {
 
     override fun areItemsTheSame(oldItem: UserData, newItem: UserData): Boolean {
         return oldItem == newItem

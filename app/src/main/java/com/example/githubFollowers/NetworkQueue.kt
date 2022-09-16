@@ -6,7 +6,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import javax.inject.Inject
 
-class NetworkQueue@Inject constructor(appContext: Context) {
+class NetworkQueue @Inject constructor(appContext: Context) {
 
     private val requestQueue: RequestQueue by lazy {
         // applicationContext is key, it keeps you from leaking the
