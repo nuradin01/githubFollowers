@@ -98,7 +98,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                         mainViewModel.userData.observe(viewLifecycleOwner) { user ->
                             mainViewModel.insertData(user)
                         }
-                        changeMenuItemColor(menuItem, R.color.yellow)
                         Snackbar
                             .make(
                                 binding!!.ivAvatar, "You have successfully " +
@@ -115,9 +114,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         return binding!!.root
     }
 
-    private fun changeMenuItemColor(item: MenuItem, color: Int) {
-        item.icon.setTint(ContextCompat.getColor(requireContext(), color))
-    }
+
 
 
 }

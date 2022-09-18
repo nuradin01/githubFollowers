@@ -55,7 +55,8 @@ class UserAdapter(
             mainViewModel.getUser(getItem(position).login)
             val profileFragment = ProfileFragment()
             (it.context as AppCompatActivity).supportFragmentManager
-                .beginTransaction().replace(R.id.flayout, profileFragment).addToBackStack(null)
+                .beginTransaction().replace(R.id.flayout, profileFragment)
+                .addToBackStack(null)
                 .commit()
         }
 

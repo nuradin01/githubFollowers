@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.lifecycle.ViewModelProvider
 
 import com.example.githubFollowers.databinding.ActivityMainBinding
@@ -59,14 +60,12 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-        binding.bottomNavigationView.setOnNavigationItemSelectedListener {
+        binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.miHome ->{
 
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.flayout,fragmentHome)
-                        .commit()
+
+                    supportFragmentManager.popBackStack()
                 }
                 R.id.miFavorites -> {
                     val favoriteFragment =FavoriteFragment()
