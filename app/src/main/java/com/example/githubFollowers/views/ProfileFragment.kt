@@ -1,7 +1,11 @@
 package com.example.githubFollowers.views
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.fragment.app.Fragment
@@ -13,7 +17,9 @@ import com.example.githubFollowers.R
 import com.example.githubFollowers.databinding.FragmentFollowersBinding
 import com.example.githubFollowers.databinding.FragmentHomeBinding
 import com.example.githubFollowers.databinding.FragmentProfileBinding
+import com.example.githubFollowers.models.UserData
 import com.example.githubFollowers.viewmodels.MainViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -28,6 +34,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private val mainViewModel: MainViewModel by activityViewModels()
     private var binding: FragmentProfileBinding? = null
+    private lateinit var currentUser: UserData
 
 
     override fun onCreateView(
@@ -38,20 +45,38 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         mainViewModel.userData.observe(viewLifecycleOwner) { user ->
+            currentUser = user
             binding!!.ivAvatar.load(user.avatar_url) {
                 crossfade(600)
                 error(R.drawable.ic_person)
             }
             binding!!.tvUsername.text = user.login
             binding!!.tvName.text = user.name
-            user.location?.let { binding!!.tvLocation.text = it }
-            user.bio?.let { binding!!.tvBio.text = it }
+            if (user.location.isNullOrEmpty() || user.location == "null") {
+                binding!!.tvLocation.visibility = View.INVISIBLE
+                binding!!.imageView3.visibility = View.INVISIBLE
+            } else {
+                binding!!.tvLocation.text = user.location
+            }
+            if (user.bio.isNullOrEmpty() || user.bio == "null") {
+                binding!!.tvBio.visibility = View.GONE
+            } else {
+                binding!!.tvBio.text = user.bio
+            }
             binding!!.tvFollowingNumber.text = user.following.toString()
             binding!!.tvFollowersNumber.text = user.followers.toString()
             binding!!.tvRepoNumber.text = user.public_repos.toString()
             binding!!.tvGistsNumber.text = user.public_gists.toString()
             binding!!.tvJoinedAt.text = "GitHub since ${user.created_at}"
 
+        }
+
+        binding!!.btnGithubProfile.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/${currentUser.login}"))
+            startActivity(intent)
+        }
+        binding!!.btnGetFollowers.setOnClickListener {
+            mainViewModel.getFollowers(currentUser.login)
         }
         // The usage of an interface lets you inject your own implementation
         val menuHost: MenuHost = requireActivity()

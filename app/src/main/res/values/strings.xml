@@ -14,4 +14,6 @@
     <string name="favorites">Favorites</string>
     <string name="no_users">No users</string>
     <string name="delete_all_users">Delete all users</string>
+    <string name="get_user">get user</string>
+    <string name="github_profile">github profile</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.githubFollowers.repository
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
@@ -53,7 +54,7 @@ class Repository @Inject constructor(
     suspend fun getFollowers(userName: String) = withContext(Dispatchers.IO) {
         val request = StringRequest(
             Request.Method.GET,
-            "https://api.github.com/users/$userName/followers",
+            "https://api.github.com/users/$userName/followers?per_page=100",
             { response ->
                 try {
                     //Get data as Json Object
@@ -78,8 +79,8 @@ class Repository @Inject constructor(
                 }
             },
             { error ->
-                errorCode.postValue(error.networkResponse?.statusCode)
-                Timber.d("Fail to get response: ${error.networkResponse?.statusCode}")
+//                errorCode.postValue(error.networkResponse?.statusCode)
+                Log.d("followers error","Fail to get response: ${error.networkResponse?.statusCode}")
             })
         networkQueue.addToRequestQueue(request)
     }

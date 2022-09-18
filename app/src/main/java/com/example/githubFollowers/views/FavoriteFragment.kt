@@ -95,7 +95,7 @@ class FavoriteFragment : Fragment(R.layout.fragment_favorite) {
                     requireContext(),
                     GridLayoutManager.VERTICAL, false
                 )
-                val recycleAdapter = FavoriteAdapter()
+                val recycleAdapter = FavoriteAdapter(mainViewModel)
                 adapter = recycleAdapter
                 recycleAdapter.submitList(it)
             }

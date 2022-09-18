@@ -179,7 +179,7 @@
                android:id="@+id/ivFollowing"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_marginTop="84dp"
+               android:layout_marginTop="200dp"
                android:src="@drawable/ic_heart"
                app:layout_constraintStart_toStartOf="@+id/ivFolder"
                app:layout_constraintTop_toTopOf="parent" />
@@ -202,7 +202,7 @@
                android:id="@+id/ivFollowers"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_marginTop="84dp"
+               android:layout_marginTop="200dp"
                android:layout_marginEnd="8dp"
                android:src="@drawable/ic_people"
                app:layout_constraintEnd_toStartOf="@+id/tvGists"
@@ -252,6 +252,29 @@
                app:layout_constraintStart_toStartOf="@+id/ivFollowers"
                app:layout_constraintTop_toBottomOf="@+id/tvFollowers"
                app:layout_constraintVertical_bias="0.0" />
+
+           <Button
+               android:id="@+id/btnGithubProfile"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="12dp"
+               android:text="@string/github_profile"
+               app:layout_constraintEnd_toEndOf="@+id/tvGists"
+               app:layout_constraintHorizontal_bias="0.0"
+               app:layout_constraintStart_toStartOf="@+id/ivFolder"
+               app:layout_constraintTop_toBottomOf="@+id/tvRepoNumber" />
+
+           <Button
+               android:id="@+id/btnGetFollowers"
+               android:layout_width="0dp"
+               android:backgroundTint="@color/teal_200"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="12dp"
+               android:text="@string/get_followers"
+               app:layout_constraintEnd_toEndOf="@+id/tvFollowers"
+               app:layout_constraintHorizontal_bias="0.506"
+               app:layout_constraintStart_toStartOf="@+id/ivFollowing"
+               app:layout_constraintTop_toBottomOf="@+id/tvFollowingNumber" />
 
 
        </androidx.constraintlayout.widget.ConstraintLayout>

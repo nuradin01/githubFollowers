@@ -2,6 +2,7 @@ package com.example.githubFollowers
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 
@@ -11,6 +12,8 @@ import com.example.githubFollowers.views.FavoriteFragment
 import com.example.githubFollowers.views.FollowersFragment
 
 import com.example.githubFollowers.views.HomeFragment
+import com.example.githubFollowers.views.ProfileFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -27,10 +30,32 @@ class MainActivity : AppCompatActivity() {
         val fragmentHome = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.flayout,fragmentHome).commit()
 
+        mainViewModel.userData.observe(this) { user ->
+            if (user != null) {
+                val profileFragment = ProfileFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.flayout, profileFragment)
+                    .addToBackStack(null).commit()
+            }
+        }
         mainViewModel.followersData.observe(this) { followers->
             if (followers!=null){
                 val followersFragment = FollowersFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.flayout,followersFragment).addToBackStack(null).commit()
+            }
+
+        }
+        mainViewModel.errorCode.observe(this) { code ->
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.flayout, fragmentHome)
+                .commit()
+            if (code >= 400) {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Something Went wrong")
+                    .setMessage("this username does not exist!")
+                    .setPositiveButton("Ok") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .show()
             }
 
         }

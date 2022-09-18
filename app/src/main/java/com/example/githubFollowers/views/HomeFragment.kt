@@ -32,14 +32,13 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
 
-        binding!!.btnGetFollowers.setOnClickListener {
+        binding!!.btnGetUser.setOnClickListener {
 
             val username = binding!!.userNameTextInput.text.toString()
             if (username.isEmpty()) {
                 binding!!.userNameTextField.error = "This field can not be empty"
             } else {
-                mainViewModel.getFollowers(username)
-
+                mainViewModel.getUser(username)
             }
 
         }
@@ -47,18 +46,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
 
 
-        mainViewModel.errorCode.observe(viewLifecycleOwner) { code ->
-            if (code >= 400) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Something Went wrong")
-                    .setMessage("this username does not exist!")
-                    .setPositiveButton("Ok") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
 
-        }
 
 
 

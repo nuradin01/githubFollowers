@@ -18,7 +18,9 @@ import com.example.githubFollowers.views.ProfileFragment
 import dagger.hilt.android.scopes.FragmentScoped
 
 @FragmentScoped
-class FavoriteAdapter() :
+class FavoriteAdapter(
+    private val mainViewModel: MainViewModel
+) :
     ListAdapter<UserData, FavoriteAdapter.ViewHolder>(NetworkDataCallBack2()) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -49,6 +51,13 @@ class FavoriteAdapter() :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position).avatar_url, getItem(position).login)
+        holder.itemView.findViewById<ConstraintLayout>(R.id.clUser).setOnClickListener {
+            mainViewModel.getUser(getItem(position).login)
+            val profileFragment = ProfileFragment()
+            (it.context as AppCompatActivity).supportFragmentManager
+                .beginTransaction().replace(R.id.flayout, profileFragment).addToBackStack(null)
+                .commit()
+        }
     }
 }
 
