@@ -16,4 +16,5 @@
     <string name="delete_all_users">Delete all users</string>
     <string name="get_user">get user</string>
     <string name="github_profile">github profile</string>
+    <string name="search">search</string>
 </resources>

@@ -55,7 +55,7 @@ class Repository @Inject constructor(
     suspend fun getFollowers(userName: String, page: Int = 1) = withContext(Dispatchers.IO) {
         val request = StringRequest(
             Request.Method.GET,
-            "https://api.github.com/users/$userName/followers?page=$page&per_page=100",
+            "https://api.github.com/users/$userName/followers?page=$page",
             { response ->
                 try {
                     //Get data as Json Object
