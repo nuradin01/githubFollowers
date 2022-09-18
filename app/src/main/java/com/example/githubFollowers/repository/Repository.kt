@@ -30,6 +30,7 @@ class Repository @Inject constructor(
 
     //To store error code received from the network
     val errorCode = MutableLiveData<Int>()
+    val pageNum = MutableLiveData<Int>()
 
     /**
      * This function insert network data to DB
@@ -51,10 +52,10 @@ class Repository @Inject constructor(
      * Using a coroutine to fetch network data through the IO Thread
      * Get data as Json Object and post to live data
      */
-    suspend fun getFollowers(userName: String) = withContext(Dispatchers.IO) {
+    suspend fun getFollowers(userName: String, page: Int = 1) = withContext(Dispatchers.IO) {
         val request = StringRequest(
             Request.Method.GET,
-            "https://api.github.com/users/$userName/followers?per_page=100",
+            "https://api.github.com/users/$userName/followers?page=$page&per_page=100",
             { response ->
                 try {
                     //Get data as Json Object
@@ -73,6 +74,7 @@ class Repository @Inject constructor(
 
                     }
                     followersData.postValue(tempList)
+                    pageNum.postValue(page)
 
                 } catch (e: Exception) {
                     Timber.d("Error in response:%s", e.toString())

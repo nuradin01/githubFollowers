@@ -21,12 +21,13 @@ class MainViewModel @Inject constructor(private val repository: Repository) : Vi
     val followersData: LiveData<List<UserData>> = repository.followersData
     val userData: LiveData<UserData> = repository.userData
     val errorCode: LiveData<Int> = repository.errorCode
+    val pageNum: LiveData<Int> = repository.pageNum
 
     /**
      * Launch network request to fetch data
      */
-    fun getFollowers(userName: String) = viewModelScope.launch {
-        repository.getFollowers(userName)
+    fun getFollowers(userName: String, page: Int = 1) = viewModelScope.launch {
+        repository.getFollowers(userName, page)
     }
 
     //

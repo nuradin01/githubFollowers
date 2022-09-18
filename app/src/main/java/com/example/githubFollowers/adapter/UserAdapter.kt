@@ -70,6 +70,6 @@ class NetworkDataCallBack : DiffUtil.ItemCallback<UserData>() {
     }
 
     override fun areContentsTheSame(oldItem: UserData, newItem: UserData): Boolean {
-        return oldItem.name == newItem.name
+        return oldItem.login == newItem.login
     }
 }
