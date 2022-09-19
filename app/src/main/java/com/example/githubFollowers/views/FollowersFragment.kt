@@ -74,7 +74,7 @@ class FollowersFragment : Fragment(R.layout.fragment_followers), SearchView.OnQu
                 val visibleItemCount: Int = gridLayoutManager.childCount
                 val pastVisibleItem: Int =
                     gridLayoutManager.findFirstCompletelyVisibleItemPosition()
-                val total = mAdapter.itemCount
+//                val total = mAdapter.itemCount
                 if (visibleItemCount + pastVisibleItem >= 30) {
                     mainViewModel.pageNum.observe(viewLifecycleOwner) { pageNum ->
                         page = pageNum

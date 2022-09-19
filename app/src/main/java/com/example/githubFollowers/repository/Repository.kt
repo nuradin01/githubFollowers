@@ -82,7 +82,7 @@ class Repository @Inject constructor(
             },
             { error ->
 //                errorCode.postValue(error.networkResponse?.statusCode)
-                Log.d("followers error","Fail to get response: ${error.networkResponse?.statusCode}")
+                Timber.d("Fail to get response: ${error.networkResponse?.statusCode}")
             })
         networkQueue.addToRequestQueue(request)
     }
