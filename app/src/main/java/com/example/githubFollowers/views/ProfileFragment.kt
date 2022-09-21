@@ -4,27 +4,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
-import androidx.fragment.app.Fragment
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import coil.load
 import com.example.githubFollowers.R
-import com.example.githubFollowers.databinding.FragmentFollowersBinding
-import com.example.githubFollowers.databinding.FragmentHomeBinding
 import com.example.githubFollowers.databinding.FragmentProfileBinding
 import com.example.githubFollowers.models.UserData
 import com.example.githubFollowers.viewmodels.MainViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -67,9 +61,11 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             binding!!.tvFollowersNumber.text = user.followers.toString()
             binding!!.tvRepoNumber.text = user.public_repos.toString()
             binding!!.tvGistsNumber.text = user.public_gists.toString()
-            binding!!.tvJoinedAt.text = "GitHub since ${user.created_at}"
 
+            binding!!.tvJoinedAt.text = "GitHub since ${user.created_at.substring(0,10)}"
         }
+
+
 
         binding!!.btnGithubProfile.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/${currentUser.login}"))

@@ -10,6 +10,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,7 @@ import com.example.githubFollowers.viewmodels.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import timber.log.Timber
 import java.util.*
+import kotlin.properties.Delegates
 
 
 /**
@@ -32,7 +34,7 @@ class FollowersFragment : Fragment(R.layout.fragment_followers), SearchView.OnQu
     private val mainViewModel: MainViewModel by activityViewModels()
     private var binding: FragmentFollowersBinding? = null
     private val mAdapter by lazy { UserAdapter(mainViewModel) }
-    private var page = 1
+    private var page by Delegates.notNull<Int>()
     private lateinit var currentUser: String
 
 
@@ -49,6 +51,10 @@ class FollowersFragment : Fragment(R.layout.fragment_followers), SearchView.OnQu
         binding = FragmentFollowersBinding.inflate(inflater, container, false)
         mainViewModel.userData.observe(viewLifecycleOwner) { user ->
             currentUser = user.login
+        }
+        mainViewModel.pageNum.observe(viewLifecycleOwner) { pageNum ->
+            page = pageNum
+            page++
         }
         val gridLayoutManager = GridLayoutManager(requireContext(), 3)
 
@@ -74,12 +80,9 @@ class FollowersFragment : Fragment(R.layout.fragment_followers), SearchView.OnQu
                 val visibleItemCount: Int = gridLayoutManager.childCount
                 val pastVisibleItem: Int =
                     gridLayoutManager.findFirstCompletelyVisibleItemPosition()
-//                val total = mAdapter.itemCount
-                if (visibleItemCount + pastVisibleItem >= 30) {
-                    mainViewModel.pageNum.observe(viewLifecycleOwner) { pageNum ->
-                        page = pageNum
-                        page++
-                    }
+                val total = mAdapter.itemCount
+                if (visibleItemCount + pastVisibleItem >= total) {
+
                     mainViewModel.getFollowers(currentUser, page)
                 }
                 super.onScrolled(recyclerView, dx, dy)

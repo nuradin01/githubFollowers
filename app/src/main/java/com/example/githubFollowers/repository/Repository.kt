@@ -73,7 +73,18 @@ class Repository @Inject constructor(
                         )
 
                     }
-                    followersData.postValue(tempList)
+                    if (page > 1) {
+                        if (tempList.isEmpty()) {
+                            followersData.postValue(followersData.value)
+                        } else {
+                            val copyData = followersData.value
+                            val combinedData = copyData!!.toList() + tempList
+                            followersData.postValue(combinedData.toSet().toList())
+                        }
+                    } else {
+                        followersData.postValue(tempList)
+                        pageNum.postValue(page+3)
+                    }
                     pageNum.postValue(page)
 
                 } catch (e: Exception) {
