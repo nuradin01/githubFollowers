@@ -32,21 +32,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.flayout,fragmentHome).commit()
 
 
-        mainViewModel.errorCode.observe(this) { code ->
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.flayout, fragmentHome)
-                .commit()
-            if (code >= 400) {
-                MaterialAlertDialogBuilder(this)
-                    .setTitle("Something Went wrong")
-                    .setMessage("this username does not exist!")
-                    .setPositiveButton("Ok") { dialog, _ ->
-                        dialog.dismiss()
-                    }
-                    .show()
-            }
 
-        }
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.miHome ->{

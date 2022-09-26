@@ -1,7 +1,6 @@
 package com.example.githubFollowers.views
 
 import android.os.Bundle
-import android.text.TextUtils.replace
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -40,6 +39,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 binding!!.userNameTextField.error = "This field can not be empty"
             } else {
                 mainViewModel.getUser(username)
+                mainViewModel.errorCode.observe(viewLifecycleOwner) { code ->
+                    if (code >= 400) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("Something Went wrong")
+                            .setMessage("this username does not exist!")
+                            .setPositiveButton("Ok") { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .show()
+                    }
+
+                }
                 mainViewModel.userData.observe(viewLifecycleOwner) { user ->
                     if (user != null) {
                         val profileFragment = ProfileFragment()

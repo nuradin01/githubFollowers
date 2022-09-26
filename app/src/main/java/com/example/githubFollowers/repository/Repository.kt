@@ -75,7 +75,7 @@ class Repository @Inject constructor(
                     }
                     if (page > 1) {
                         if (tempList.isEmpty()) {
-                            followersData.postValue(followersData.value)
+                            Timber.d(followersData.value.toString())
                         } else {
                             val copyData = followersData.value
                             val combinedData = copyData!!.toList() + tempList
@@ -83,7 +83,7 @@ class Repository @Inject constructor(
                         }
                     } else {
                         followersData.postValue(tempList)
-                        pageNum.postValue(page+3)
+                        pageNum.postValue(page)
                     }
                     pageNum.postValue(page)
 
