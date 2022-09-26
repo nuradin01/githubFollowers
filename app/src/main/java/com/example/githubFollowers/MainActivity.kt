@@ -31,20 +31,7 @@ class MainActivity : AppCompatActivity() {
         val fragmentHome = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.flayout,fragmentHome).commit()
 
-        mainViewModel.userData.observe(this) { user ->
-            if (user != null) {
-                val profileFragment = ProfileFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.flayout, profileFragment)
-                    .addToBackStack(null).commit()
-            }
-        }
-        mainViewModel.followersData.observe(this) { followers->
-            if (followers!=null){
-                val followersFragment = FollowersFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.flayout,followersFragment).addToBackStack(null).commit()
-            }
 
-        }
         mainViewModel.errorCode.observe(this) { code ->
             supportFragmentManager.beginTransaction()
                 .replace(R.id.flayout, fragmentHome)

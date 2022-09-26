@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -73,6 +74,15 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
         binding!!.btnGetFollowers.setOnClickListener {
             mainViewModel.getFollowers(currentUser.login)
+            mainViewModel.followersData.observe(viewLifecycleOwner) { followers ->
+                if (followers != null) {
+                    val followersFragment = FollowersFragment()
+                    (requireActivity() as AppCompatActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.flayout, followersFragment)
+                        .addToBackStack(null).commit()
+                }
+
+            }
         }
         // The usage of an interface lets you inject your own implementation
         val menuHost: MenuHost = requireActivity()

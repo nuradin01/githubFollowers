@@ -1,6 +1,7 @@
 package com.example.githubFollowers.views
 
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
@@ -39,9 +40,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 binding!!.userNameTextField.error = "This field can not be empty"
             } else {
                 mainViewModel.getUser(username)
+                mainViewModel.userData.observe(viewLifecycleOwner) { user ->
+                    if (user != null) {
+                        val profileFragment = ProfileFragment()
+                        (requireActivity() as AppCompatActivity).supportFragmentManager.beginTransaction()
+                            .replace(R.id.flayout, profileFragment)
+                            .addToBackStack(null).commit()
+                    }
+
+                }
             }
 
         }
+
+
 
 
 

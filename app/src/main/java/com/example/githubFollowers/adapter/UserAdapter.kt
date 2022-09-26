@@ -54,10 +54,7 @@ class UserAdapter(
         holder.itemView.findViewById<ConstraintLayout>(R.id.clUser).setOnClickListener {
             mainViewModel.getUser(getItem(position).login)
             val profileFragment = ProfileFragment()
-            (it.context as AppCompatActivity).supportFragmentManager
-                .beginTransaction().replace(R.id.flayout, profileFragment)
-                .addToBackStack(null)
-                .commit()
+            (it.context as AppCompatActivity).supportFragmentManager.popBackStack()
         }
 
 
